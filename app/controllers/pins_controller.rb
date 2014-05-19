@@ -7,7 +7,7 @@ class PinsController < ApplicationController
   # GET /pins.json
   def index
     @pins   = Pin.all
-    if current_user
+    if user_signed_in?
       @admin  = current_user.is_admin?
     end
   end
@@ -73,7 +73,7 @@ class PinsController < ApplicationController
     end
 
     def correct_user
-      if current_user
+      if user_signed_in?
         unless @pin.editable_by?(current_user)
           redirect_to pins_path, notice: "You didn't say the magic word!"
         end
