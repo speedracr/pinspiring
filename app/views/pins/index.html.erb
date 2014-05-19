@@ -1,6 +1,6 @@
 <h1>Listing pins</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Description</th>
@@ -13,10 +13,18 @@
       <tr>
         <td><%= pin.description %></td>
         <td><%= link_to 'Show', pin %></td>
-        <% if pin.user == current_user %>
-        <td><%= link_to 'Edit', edit_pin_path(pin) %></td>
-        <td><%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
+        <% if current_user && pin.editable_by?(current_user) %>
+            <% if current_user.is_admin? %>
+              <td><%= link_to 'Edit as admin', edit_pin_path(pin) %></td>
+              <td><%= link_to 'Destroy as admin', pin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% else %>
+              <td><%= link_to 'Edit', edit_pin_path(pin) %></td>
+              <td><%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% end %>
+        <% else %>
+          <td></td>
+          <td></td>
+        <% end %>  
       </tr>
     <% end %>
   </tbody>
